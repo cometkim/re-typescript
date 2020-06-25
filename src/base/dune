@@ -9,5 +9,5 @@
  (name re_typescript_base)
  (public_name re_typescript.base)
  (libraries file-context-printer.lib pastel.lib console.lib containers
-   menhirLib re_typescript.config)
+   menhirLib re_typescript.config re_typescript.types)
  (ocamlopt_flags (-linkall)))

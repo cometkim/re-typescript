@@ -1,6 +1,15 @@
 type ts_path = (list(string), list(string));
 
 /**
+    Literals
+*/
+type ts_string_literal = [ | `String(string)];
+type ts_number_literal = [ | `Number(float)];
+type ts_literal_expr = [ ts_string_literal | ts_number_literal];
+type ts_boolean_literal = [ | `TrueLiteral | `FalseLiteral];
+type ts_literal_type = [ ts_literal_expr | ts_boolean_literal];
+
+/**
     Modules
  */
 type ts_module = {
@@ -80,6 +89,7 @@ and ts_base_type =
   | Null
   | Undefined
   | Never
+  | Unknown
 /**
     Union types
  */
@@ -99,8 +109,11 @@ and ts_union_member = {
 and ts_type =
   | Function(ts_function)
   | Union(list(ts_union_member))
+  | Literal(ts_literal_type)
+  | EnumLiteral(ts_literal_expr)
   | MixedLiteral(ts_mixed_literal)
   | NumericLiteral(list(int))
+  | BooleanLiteral(list(bool))
   | StringLiteral(list(ts_identifier))
   | Enum(list(ts_identifier))
   | Base(ts_base_type)
@@ -118,6 +131,11 @@ and ts_type =
   | ResolveWithParams(
       (~path: ts_path, ~params: list((ts_identifier, ts_type))) => ts_type,
     )
+and ts_literal =
+  | LString(string)
+  | LNumber(float)
+  | LBoolean(bool)
+  | LEnum(ts_literal)
 and ts_identifier = {
   i_value: string,
   i_ident: string,
@@ -148,6 +166,10 @@ let ts_is_assignable_to = (t1: ts_type, t2: ts_type): bool => {
   // --- Functions
   | (Function(_), Function(_)) => true
   | (Function(_), _) => false
+  // --- Never
+  | (Base(Never), Base(Any)) => false
+  // --- Any
+  | (_, Base(Any)) => true
   | _ =>
     Console.warn("Assignment not implemented");
     false;

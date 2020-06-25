@@ -66,6 +66,7 @@ module Make = (Config: Config) : Ast_generator.T => {
                 "option",
               )
             | Never
+            | Unknown
             | Any =>
               gen_config.has_any = true;
               generate_base_type("any");
@@ -167,6 +168,9 @@ module Make = (Config: Config) : Ast_generator.T => {
         td_prepend: None,
         td_append: None,
       }
+    | BooleanLiteral(_) => raise(Not_found)
+    | Literal(_) => raise(Not_found)
+    | EnumLiteral(_) => raise(Not_found)
     | StringLiteral(keys) =>
       switch (config.string_variant_mode) {
       | `PolyVariant => {

@@ -116,6 +116,7 @@ and type_ =
   | Boolean(Parse_info.t)
   | Null(Parse_info.t)
   | Never(Parse_info.t)
+  | Unknown(Parse_info.t)
   | Undefined(Parse_info.t)
   | Void(Parse_info.t)
   | Any(Parse_info.t)

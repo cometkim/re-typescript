@@ -375,6 +375,7 @@ let type_predefined :=
   | pi = PRIM_ANY;          { Ts.Any(pi) }
   | pi = SYMBOL;            { Ts.Symbol(pi) }
   | pi = NEVER;             { Ts.Never(pi) }
+  | pi = UNKNOWN;           { Ts.Unknown(pi) }
   | s =  literal_string;    { s }
   | n =  literal_number;    { n }
   | b =  literal_bool;      { b }

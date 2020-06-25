@@ -156,6 +156,7 @@ let rec get_union_type_name = (um_type: ts_type) => {
   | Base(Null) => "null"
   | Base(Undefined) => "undefined"
   | Base(Any) => "any"
+  | Base(Unknown) => "unknown"
   | Function(_) => "func"
   | Reference({tr_path_resolved, _}) =>
     tr_path_resolved
@@ -172,6 +173,11 @@ let rec get_union_type_name = (um_type: ts_type) => {
   | Tuple(_) => "tuple"
   | MixedLiteral(_) => "variant"
   | NumericLiteral(_) => "num"
+  | BooleanLiteral([true]) => "true"
+  | BooleanLiteral([false]) => "false"
+  | BooleanLiteral(_) => "bool"
+  | EnumLiteral(_) => "enum"
+  | Literal(_) => "literal"
   | StringLiteral(_) => "literal"
   | Enum(_) => "enum"
   | Arg(i) => i |> Ident.ident
@@ -256,6 +262,7 @@ let rec type_to_string = (t: Ts.type_) =>
   | Undefined(_) => "Undefined"
   | Void(_) => "Void"
   | Any(_) => "Any"
+  | Unknown(_) => "Unknown"
   | Symbol(_) => "Symbol"
   | This(_) => "This"
   | UnionTemp(_) => "UnionTemp"
@@ -334,6 +341,7 @@ let rec ts_to_string = (t: ts_type) =>
   | Union(_) => "Union"
   | MixedLiteral(_) => "MixedLiteral"
   | NumericLiteral(_) => "NumericLiteral"
+  | BooleanLiteral(_) => "BooleanLiteral"
   | StringLiteral(lst) =>
     Printf.sprintf(
       "StringLiteral: %s",
@@ -347,6 +355,7 @@ let rec ts_to_string = (t: ts_type) =>
   | Base(Any) => "Base_Any"
   | Base(Null) => "Base_Null"
   | Base(Never) => "Base_Never"
+  | Base(Unknown) => "Base_Unknown"
   | Base(Undefined) => "Base_Undefined"
   | Interface(f, extended) =>
     Printf.sprintf(
@@ -377,6 +386,8 @@ let rec ts_to_string = (t: ts_type) =>
   | Import(_) => "Import"
   | Module(_) => "Module"
   | Lazy(_) => "Lazy"
+  | Literal(_) => "Literal"
+  | EnumLiteral(_) => "EnumLiteral"
   | ResolveWithParams(_) => "ResolveWithParams"
   | Arg(i) => Printf.sprintf("Arg: %s", Ident.value(i))
   }

@@ -1161,6 +1161,7 @@ and parse__type = (~inline=false, ~path, type_: Ts.type_) => {
   | Null(_) => Base(Null)
   | Undefined(_) => Base(Undefined)
   | Never(_) => Base(Never)
+  | Unknown(_) => Base(Unknown)
   | Union(left, right) as t =>
     inline ? parse__inline(~path, t) : parse__union(~path, ~left, ~right)
   | UnionTemp(members) as t =>
@@ -1186,8 +1187,8 @@ and parse__type = (~inline=false, ~path, type_: Ts.type_) => {
       ? parse__inline(~path, ~parameters=?f_parameters, t)
       : parse__function(~path, f_body, f_ret)
   | StringLiteral(_) as t
-  | NumberLiteral(_) as t
-  | BoolLiteral(_) as t => parse__type(~inline, ~path, Union(t, None))
+  | NumberLiteral(_) as t => parse__type(~inline, ~path, Union(t, None))
+  | BoolLiteral({item, _}) => BooleanLiteral([item])
   | Intersection(left, right) as t =>
     inline
       ? parse__inline(~path, t) : parse__intersection(~path, ~left, ~right)

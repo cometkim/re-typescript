@@ -17,24 +17,38 @@ let content = {|
 // type T3 = TypeName<() => void>;  // "function"
 // type T4 = TypeName<string[]>;  // "object"
 
-// export type Or<A, B, C = false> = A extends true
-//   ? true
-//   : B extends true
-//   ? true
-//   : C extends true
-//   ? true
+export type Or<A, B, C = false> = A extends true
+  ? true
+  : B extends true
+  ? true
+  : C extends true
+  ? true
+  : false;
+
+type x = Or<true, false>;
+
+// export type And<A, B, C = true> = A extends true
+//   ? B extends true
+//     ? C extends true
+//       ? true
+//       : false
+//     : false
 //   : false;
 
-// type x = Or<true, false>;
+// export type IsEmptyInterface<T> = And<
+//   keyof T extends never ? true : false,
+//   string extends T ? true : false,
+//   unknown extends T ? false : true
+// >;
 
-interface A {
-  x: string;
-  y: number;
-  z: boolean;
-}
+// interface A {
+//   x: string;
+//   y: number;
+//   z: boolean;
+// }
 
-type Exclude<T, U> = T extends U ? never : T;
-type stripped = Exclude<keyof A, "y">;
+// type Exclude<T, U> = T extends U ? never : T;
+// type stripped = Exclude<keyof A, "y">;
 
 // type Extract<T, U> = T extends U ? T : never;
 
